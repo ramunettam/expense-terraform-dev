@@ -7,7 +7,7 @@ variable "environment" {
   
 }
 
-variable "comman_tags" {
+variable "common_tags" {
     type=map
     default = {
         Name="expense"
