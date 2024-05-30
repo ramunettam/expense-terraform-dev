@@ -8,6 +8,12 @@ variable "environment" {
   
 }
 
+variable "zone_name" {
+      type = string
+      default = "nettam.online"
+  
+}
+
 variable "common_tags" {
       type = map
       default = {

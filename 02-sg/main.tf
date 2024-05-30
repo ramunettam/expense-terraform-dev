@@ -1,10 +1,12 @@
 module "db" {
-  source = "../../terraform-aws-security-group"
+ source = "../../terraform-aws-security-group"
+# source = "https://github.com/ramunettam/terraform-aws-security-group.git"
   project_name = var.project_name
   environment = var.environment
   sg_description = "SG for DB MySQL Instances"
   vpc_id = data.aws_ssm_parameter.vpc_id.value
-  comman_tags = var.comman_tags
+  
+  common_tags = var.common_tags
   sg_name = "db"
 }
 
@@ -14,7 +16,8 @@ module "backend" {
   environment = var.environment
   sg_description = "SG for backend Instances"
   vpc_id = data.aws_ssm_parameter.vpc_id.value
-  comman_tags = var.comman_tags
+  common_tags = var.common_tags
+
   sg_name = "backend"
 }
 
@@ -24,7 +27,7 @@ module "frontend" {
   environment = var.environment
   sg_description = "SG for frontend Instances"
   vpc_id = data.aws_ssm_parameter.vpc_id.value
-  comman_tags = var.comman_tags
+  common_tags = var.common_tags
   sg_name = "frontend"
 }
 
@@ -34,13 +37,13 @@ module "bastion" {
   environment = var.environment
   sg_description = "SG for bastion Instances"
   vpc_id = data.aws_ssm_parameter.vpc_id.value
-  comman_tags = var.comman_tags
+  common_tags = var.common_tags
   sg_name = "bastion"
 }
 
 
 module "ansible" {
-  source = "../../terraform-aws-securitygroup"
+  source = "../../terraform-aws-security-group"
   project_name = var.project_name
   environment = var.environment
   sg_description = "SG for Ansible Instances"

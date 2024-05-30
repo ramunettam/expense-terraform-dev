@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../terraform-aws-security-group"
+		},
+		{
+			"path": "../../terraform-aws-vpc"
+		},
+		{
+			"path": "../../terraform-vpc-test"
+		}
+	]
+}

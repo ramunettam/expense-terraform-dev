@@ -3,15 +3,16 @@ module "backend" {
 
   name = "${var.project_name}-${var.environment}-backend"
 
-  instance_type          = "t2.micro"
+  instance_type          = "t3.micro"
+  vpc_security_group_ids = [data.aws_ssm_parameter.backend_sg_id.value]
+  # convert StringList to list and get first element
+  subnet_id = local.private_subnet_id
   ami = data.aws_ami.ami_info.id
-  
-  vpc_security_group_ids = [data.aws_ssm_parameter.private_subnet_ids.value]
-  subnet_id              = local.private_subnet_id
-
   tags = merge(
-      var.comman_tags,
-      { Name="${var.project_name}-${var.environment}-backend"}
+    var.common_tags,
+    {
+        Name = "${var.project_name}-${var.environment}-backend"
+    }
   )
 }
 
@@ -20,14 +21,15 @@ module "frontend" {
 
   name = "${var.project_name}-${var.environment}-frontend"
 
-  instance_type          = "t2.micro"
+  instance_type          = "t3.micro"
+  vpc_security_group_ids = [data.aws_ssm_parameter.frontend_sg_id.value]
   ami = data.aws_ami.ami_info.id
   
-  vpc_security_group_ids = [data.aws_ssm_parameter.public_subnet_ids.value]
+  
   subnet_id              = local.public_subnet_id
 
   tags = merge(
-      var.comman_tags,
+      var.common_tags,
       { Name="${var.project_name}-${var.environment}-frontend"}
   )
 }
@@ -37,14 +39,19 @@ module "ansible" {
 
   name = "${var.project_name}-${var.environment}-ansible"
 
-  instance_type          = "t2.micro"
+  instance_type          = "t3.micro"
   ami = data.aws_ami.ami_info.id
   
-  vpc_security_group_ids = [data.aws_ssm_parameter.public_subnet_ids.value]
+  vpc_security_group_ids = [data.aws_ssm_parameter.ansible_sg_id.value]
   subnet_id              = local.public_subnet_id
+  user_data = file("expense.sh")
 
   tags = merge(
       var.common_tags,
       { Name="${var.project_name}-${var.environment}-ansible"}
   )
+  depends_on = [ module.frontend,module.backend ]
 }
+
+# r53 records for backend and front end
+
